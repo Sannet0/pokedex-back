@@ -51,12 +51,14 @@ export class PokemonsService {
     const correctTypes = ['normal', 'poison', 'psychic', 'grass', 'ground', 'ice', 'fire', 'rock', 'dragon', 'water', 'bug', 'dark', 'fighting', 'ghost', 'steel', 'flying', 'electric', 'fairy'];
     const pokemonsByAllTypes = [];
     const uniqTypes = [...new Set(types)];
+    let i = 0;
 
     for (const index in uniqTypes) {
       const type = uniqTypes[index].toLowerCase();
       if (correctTypes.includes(type)) {
         const responce = await this.httpService.get(this.baseURL + 'type/' + type).toPromise();
         for (const index in responce.data.pokemon) {
+          i++;
           if (name) {
             if (responce.data.pokemon[index].pokemon.name.search(name) !== -1) {
               pokemonsByAllTypes.push(responce.data.pokemon[index].pokemon.name);
@@ -68,7 +70,12 @@ export class PokemonsService {
       }
     }
 
-    const unUniqPokemonsByType = pokemonsByAllTypes.filter((e, i, a) => a.indexOf(e) !== i);
+    let unUniqPokemonsByType = pokemonsByAllTypes;
+
+    if (!i) {
+      unUniqPokemonsByType = pokemonsByAllTypes.filter((e, i, a) => a.indexOf(e) !== i);
+    }
+
     const slisedPOkemonsList = unUniqPokemonsByType.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
 
     return {
