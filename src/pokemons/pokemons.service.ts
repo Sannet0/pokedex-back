@@ -58,6 +58,7 @@ export class PokemonsService {
     const correctTypes = pokemonTypes;
     const pokemonsByAllTypes = [];
     const uniqTypes = [...new Set(types)];
+    let unUniqPokemonsByType = [];
     let i = 0;
 
     for (const index in uniqTypes) {
@@ -77,9 +78,10 @@ export class PokemonsService {
       }
     }
 
-    let unUniqPokemonsByType = pokemonsByAllTypes;
-
-    if (i !== 1) {
+    if (i === 1) {
+      unUniqPokemonsByType = pokemonsByAllTypes;
+    }
+    if (i === 2) {
       unUniqPokemonsByType = pokemonsByAllTypes.filter((e, i, a) => a.indexOf(e) !== i);
     }
 
