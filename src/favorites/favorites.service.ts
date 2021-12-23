@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Favorites } from '../entitys/favorites.entity';
 import { DeleteResult, Repository } from 'typeorm';
-import { Observable } from 'rxjs';
+
+import { Favorites } from '../entitys/favorites.entity';
 
 @Injectable()
 export class FavoritesService {
@@ -29,7 +29,7 @@ export class FavoritesService {
     const slisedPokemonsList = favoritePokemons.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
 
     return {
-      count: favoritePokemons.length + 1,
+      count: favoritePokemons.length,
       pokemons: slisedPokemonsList
     };
   }

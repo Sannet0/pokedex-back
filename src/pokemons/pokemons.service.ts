@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
+
 import { FavoritesService } from '../favorites/favorites.service';
+import { pokemonTypes } from '../consts';
+import { IPokemonResponse } from '../interfaces/pokemon-responce-inteface';
+import { IPokemon } from '../interfaces/pokemon-interface';
 
 @Injectable()
 export class PokemonsService {
@@ -11,12 +15,15 @@ export class PokemonsService {
 
   baseURL = 'https://pokeapi.co/api/v2/';
 
-  getAllPokemons(offset: string, limit: string, name: string): Observable<{ count: number; pokemons: string[] }> {
+  async getAllPokemons(offset: string, limit: string, name: string): Promise<Observable<IPokemonResponse>> {
     let selfOffset = offset;
     let selflimit = limit;
+
     if (name) {
+      const response = await this.httpService.get(this.baseURL + 'pokemon?limit=1&offset=1').toPromise();
+
       selfOffset = '0';
-      selflimit = '1118';
+      selflimit = response.data.count;
     }
 
     return this.httpService.get(this.baseURL + 'pokemon?offset=' + selfOffset + '&limit=' + selflimit).pipe(
@@ -47,8 +54,8 @@ export class PokemonsService {
     );
   }
 
-  async getAllPokemonsByFilter(offset: string, limit: string, types: string[], name: string): Promise<{ count: number; pokemons: string[] }> {
-    const correctTypes = ['normal', 'poison', 'psychic', 'grass', 'ground', 'ice', 'fire', 'rock', 'dragon', 'water', 'bug', 'dark', 'fighting', 'ghost', 'steel', 'flying', 'electric', 'fairy'];
+  async getAllPokemonsByFilter(offset: string, limit: string, types: string[], name: string): Promise<IPokemonResponse> {
+    const correctTypes = pokemonTypes;
     const pokemonsByAllTypes = [];
     const uniqTypes = [...new Set(types)];
     let i = 0;
@@ -56,9 +63,9 @@ export class PokemonsService {
     for (const index in uniqTypes) {
       const type = uniqTypes[index].toLowerCase();
       if (correctTypes.includes(type)) {
+        i++;
         const responce = await this.httpService.get(this.baseURL + 'type/' + type).toPromise();
         for (const index in responce.data.pokemon) {
-          i++;
           if (name) {
             if (responce.data.pokemon[index].pokemon.name.search(name) !== -1) {
               pokemonsByAllTypes.push(responce.data.pokemon[index].pokemon.name);
@@ -72,7 +79,7 @@ export class PokemonsService {
 
     let unUniqPokemonsByType = pokemonsByAllTypes;
 
-    if (!i) {
+    if (i !== 1) {
       unUniqPokemonsByType = pokemonsByAllTypes.filter((e, i, a) => a.indexOf(e) !== i);
     }
 
@@ -84,10 +91,11 @@ export class PokemonsService {
     };
   }
 
-  async getPokemonByName(name: string, userId: number): Promise<Observable<{ img: string; stats: any[]; types: any[]; isFavorite: boolean }>> {
+  async getPokemonByName(name: string, userId: number): Promise<Observable<IPokemon>> {
     const favoritePokemons: string[] = await this.favoritesService.getAllFavoritePokemons(userId);
+    const trimmedName = name.trim();
 
-    return this.httpService.get(this.baseURL + 'pokemon/' + name).pipe(
+    return this.httpService.get(this.baseURL + 'pokemon/' + trimmedName).pipe(
       map(response => {
         const stats = [];
         const types = [];
@@ -104,11 +112,12 @@ export class PokemonsService {
           types.push(response.data.types[index].type.name);
         }
 
-        if (favoritePokemons.includes(name)) {
+        if (favoritePokemons.includes(trimmedName)) {
           isFavorite = true;
         }
 
         return {
+          name: trimmedName,
           img: response.data.sprites.front_default,
           stats,
           types,

@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entitys/user.entity';
 import { Repository } from 'typeorm';
+
 import * as passwordHash from 'password-hash';
+import { User } from '../entitys/user.entity';
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,7 @@ export class UserService {
   async registration(user: { login: string; password: string; repPassword: string }): Promise<{ jwt: string; rt: string }> {
     const { login, password, repPassword } = user;
     try {
-      if (password !== repPassword){
+      if (password !== repPassword) {
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
@@ -47,7 +48,7 @@ export class UserService {
     try {
       const accurateUser = await this.findUserByLogin(login);
 
-      if (accurateUser === undefined){
+      if (accurateUser === undefined) {
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 

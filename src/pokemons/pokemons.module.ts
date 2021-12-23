@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { HttpModule } from '@nestjs/axios';
+
 import { PokemonsController } from './pokemons.controller';
 import { PokemonsService } from './pokemons.service';
-import { HttpModule } from '@nestjs/axios';
-import { JwtModule } from '@nestjs/jwt';
 import { FavoritesModule } from '../favorites/favorites.module';
 
 @Module({

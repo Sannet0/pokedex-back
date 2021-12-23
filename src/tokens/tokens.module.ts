@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+
 import { TokensController } from './tokens.controller';
 import { TokensService } from './tokens.service';
 import { UserModule } from '../user/user.module';

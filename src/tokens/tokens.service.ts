@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -15,7 +16,7 @@ export class TokensService {
 
       const user = await this.userService.findUserByLogin(userTokenData.login);
 
-      if (user === undefined){
+      if (user === undefined) {
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
