@@ -25,7 +25,6 @@ export class FavoritesService {
 
   async getFavoritePokemonList(offset: string, limit: string, userId: number): Promise<{ count: number; pokemons: string[] }> {
     const favoritePokemons: string[] = await this.getAllFavoritePokemons(userId);
-
     const slisedPokemonsList = favoritePokemons.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
 
     return {

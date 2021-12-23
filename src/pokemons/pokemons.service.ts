@@ -43,7 +43,7 @@ export class PokemonsService {
         count = response.data.count;
         if (name) {
           pokemons = findPokemons.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
-          count = findPokemons.length + 1;
+          count = findPokemons.length;
         }
 
         return {
@@ -86,7 +86,7 @@ export class PokemonsService {
     const slisedPOkemonsList = unUniqPokemonsByType.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
 
     return {
-      count: unUniqPokemonsByType.length + 1,
+      count: unUniqPokemonsByType.length,
       pokemons: slisedPOkemonsList
     };
   }
