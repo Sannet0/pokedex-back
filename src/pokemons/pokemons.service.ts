@@ -56,41 +56,39 @@ export class PokemonsService {
 
   async getAllPokemonsByFilter(offset: string, limit: string, types: string[], name: string): Promise<IPokemonResponse> {
     const correctTypes = pokemonTypes;
-    const pokemonsByAllTypes = [];
+    let filtredPokemons: string[] = [];
+    const pokemonsByTypes: string[][] = [];
     const uniqTypes = [...new Set(types)];
-    let unUniqPokemonsByType = [];
-    let i = 0;
 
     for (const index in uniqTypes) {
       const type = uniqTypes[index].toLowerCase();
       if (correctTypes.includes(type)) {
-        i++;
-        const responce = await this.httpService.get(this.baseURL + 'type/' + type).toPromise();
-        for (const index in responce.data.pokemon) {
-          if (name) {
-            if (responce.data.pokemon[index].pokemon.name.search(name) !== -1) {
-              pokemonsByAllTypes.push(responce.data.pokemon[index].pokemon.name);
-            }
-          } else {
-            pokemonsByAllTypes.push(responce.data.pokemon[index].pokemon.name);
-          }
+        const response = await this.httpService.get(this.baseURL + 'type/' + type).toPromise();
+        const correctPokemons = response.data.pokemon;
+        const pokemonsByType: string[] = [];
+        for (const i in correctPokemons) {
+          pokemonsByType.push(correctPokemons[i].pokemon.name);
         }
+        pokemonsByTypes.push(pokemonsByType);
       }
     }
 
-    if (i === 1) {
-      unUniqPokemonsByType = pokemonsByAllTypes;
-    }
-    if (i === 2) {
-      unUniqPokemonsByType = pokemonsByAllTypes.filter((e, i, a) => a.indexOf(e) !== i);
+    for (let i = 1; i < pokemonsByTypes.length; i++) {
+      pokemonsByTypes[i] = pokemonsByTypes[i - 1].filter(pokemonName => pokemonsByTypes[i].includes(pokemonName));
     }
 
-    const slisedPOkemonsList = unUniqPokemonsByType.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
+    filtredPokemons = pokemonsByTypes[pokemonsByTypes.length - 1];
+
+    if (name) {
+      filtredPokemons = filtredPokemons.filter(pokemonName => pokemonName.search(name) !== -1);
+    }
+
+    const slicedPokemonsList = filtredPokemons.slice(Number.parseInt(offset, 10), Number.parseInt(limit, 10) + Number.parseInt(offset, 10));
 
     return {
-      count: unUniqPokemonsByType.length,
-      pokemons: slisedPOkemonsList
-    };
+      count: filtredPokemons.length,
+      pokemons: slicedPokemonsList
+    }
   }
 
   async getPokemonByName(name: string, userId: number): Promise<Observable<IPokemon>> {
