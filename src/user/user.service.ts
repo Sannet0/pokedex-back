@@ -39,7 +39,7 @@ export class UserService {
         rt: this.jwtService.sign(payload, { expiresIn: '24h' })
       };
     } catch (err) {
-      return err;
+      throw new HttpException(err.detail || err.response, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -49,7 +49,7 @@ export class UserService {
       const accurateUser = await this.findUserByLogin(login);
 
       if (accurateUser === undefined) {
-        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+        throw new HttpException('no such user', HttpStatus.BAD_REQUEST);
       }
 
       const isPasswordCorrect = passwordHash.verify(password, accurateUser.password);
@@ -62,9 +62,9 @@ export class UserService {
         };
       }
 
-      throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+      throw new HttpException('password or email not right', HttpStatus.BAD_REQUEST);
     } catch (err) {
-      return err;
+      throw new HttpException(err.detail || err.response, HttpStatus.BAD_REQUEST);
     }
   }
 
