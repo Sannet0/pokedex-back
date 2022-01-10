@@ -14,7 +14,7 @@ export class Favorites {
   @Column()
   userId: number;
 
-  @Column({ unique: true })
+  @Column()
   pokemonName: string;
 
 }
