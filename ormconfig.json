@@ -1,0 +1,13 @@
+{
+   "type": "postgres",
+   "host": "database-1.cdfqr522jpvs.eu-west-2.rds.amazonaws.com",
+   "username": "postgres",
+   "password": "postgres",
+   "port": 5432,
+   "synchronize": true,
+   "logging": true,
+   "entities": [
+      "dist/**/*.entity{.ts,.js}"
+   ],
+   "autoLoadEntities": true
+}
