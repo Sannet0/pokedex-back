@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
+import { EmptyController } from './empty.controller';
 
 @Module({
-  imports: [],
-  providers: [],
-  controllers: []
+  controllers: [EmptyController]
 })
-export class FavoritesModule {}
+export class EmptyModule {}

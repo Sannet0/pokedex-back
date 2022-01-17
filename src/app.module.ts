@@ -6,6 +6,7 @@ import { PokemonsModule } from './pokemons/pokemons.module';
 import { UserModule } from './user/user.module';
 import { TokensModule } from './tokens/tokens.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { EmptyModule } from './empty/empty.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { FavoritesModule } from './favorites/favorites.module';
     PokemonsModule,
     UserModule,
     TokensModule,
-    FavoritesModule
+    FavoritesModule,
+    EmptyModule
   ]
 })
 export class AppModule {}
