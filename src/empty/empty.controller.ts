@@ -4,6 +4,6 @@ import { Controller, Get } from '@nestjs/common';
 export class EmptyController {
   @Get('')
   async getAllFavoritePokemons(): Promise<string> {
-    return 'Hello! This is API fo Pokedex! ' + process.env.JWT_SECRET;
+    return 'Hello! This is API for Pokedex!';
   }
 }

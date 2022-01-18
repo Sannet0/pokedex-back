@@ -8,7 +8,7 @@ import { UserModule } from './user/user.module';
 import { TokensModule } from './tokens/tokens.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { EmptyModule } from './empty/empty.module';
-import { AWSModule } from './aws/aws.module';
+import { BucketModule } from './bucket/bucket.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { AWSModule } from './aws/aws.module';
     TokensModule,
     FavoritesModule,
     EmptyModule,
-    AWSModule
+    BucketModule
   ]
 })
 export class AppModule {}
