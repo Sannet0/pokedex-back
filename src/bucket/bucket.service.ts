@@ -10,7 +10,6 @@ export class BucketService {
   });
 
   bucketName = 'auto-created-bucket';
-  fileName = 'auto-upload-file';
 
   async createNewBucket() {
     const bucketName = 'auto-created-bucket'
@@ -43,16 +42,44 @@ export class BucketService {
     }
   }
 
-  async uploadFile(file) {
+  async uploadFile(file, name) {
     const params = {
       Bucket: this.bucketName,
       Body: file,
-      Key: this.fileName
+      Key: name
     };
 
     try {
       await this.s3.upload(params).promise();
-      return this.fileName + ' upload';
+      return name + ' upload';
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async deleteFile(name) {
+    const params = {
+      Bucket: this.bucketName,
+      Key: name
+    };
+
+    try {
+      await this.s3.deleteObject(params).promise();
+      return name + ' deleted';
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async downloadFile(name) {
+    const params = {
+      Bucket: this.bucketName,
+      Key: name
+    };
+
+    try {
+
+      return await this.s3.getObject(params).createReadStream();
     } catch (err) {
       return err;
     }
