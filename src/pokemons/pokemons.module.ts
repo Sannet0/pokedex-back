@@ -11,7 +11,7 @@ import { FavoritesModule } from '../favorites/favorites.module';
     HttpModule,
     FavoritesModule,
     JwtModule.register({
-      secret: 'SECRET',
+      secret: '' + process.env.JWT_SECRET,
       signOptions: {
         expiresIn: '24h'
       }
