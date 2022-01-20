@@ -17,7 +17,7 @@ export class UserService {
     const { login, password, repPassword } = user;
     try {
       if (password !== repPassword) {
-        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+        throw new HttpException('password and repPassword not same', HttpStatus.BAD_REQUEST);
       }
 
       const hash = passwordHash.generate(password);

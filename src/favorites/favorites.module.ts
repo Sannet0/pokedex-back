@@ -10,7 +10,7 @@ import { Favorites } from '../entity/favorites.entity';
   imports: [
     TypeOrmModule.forFeature([Favorites]),
     JwtModule.register({
-      secret: 'SECRET',
+      secret: '' + process.env.JWT_SECRET,
       signOptions: {
         expiresIn: '24h'
       }

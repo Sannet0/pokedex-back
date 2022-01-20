@@ -8,7 +8,7 @@ import { UserModule } from '../user/user.module';
 @Module({
   imports: [
     JwtModule.register({
-      secret: 'SECRET',
+      secret: '' + process.env.JWT_SECRET,
       signOptions: {
         expiresIn: '24h'
       }

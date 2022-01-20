@@ -10,7 +10,7 @@ import { User } from '../entity/user.entity';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'SECRET',
+      secret: '' + process.env.JWT_SECRET,
       signOptions: {
         expiresIn: '24h'
       }
